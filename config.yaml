@@ -1,0 +1,28 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+exporters:
+  basin:
+    basin_name: "hersh-otel"
+    stream_prefix: "dev"
+    batch:
+      max_records: 5
+      flush_interval: 1s
+  debug:
+    verbosity: detailed
+
+processors:
+  batch:
+    send_batch_size: 500
+    timeout: 1s
+  
+service:
+  pipelines:
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [basin]
+
