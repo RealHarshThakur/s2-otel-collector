@@ -9,16 +9,46 @@ This is an OpenTelemetry collector with a custom S2 Basin exporter that sends lo
 - **Batch Processor**: Batches logs before sending for efficient delivery
 - **Debug Exporter**: Optional debug output for inspection
 
+## Quick Start
+
+1. Get an access token from [S2 Dashboard](https://s2.dev/dashboard)
+2. Create a basin: `s2 create-basin my-logs`
+3. Configure the collector in `config.yaml` with your basin name
+4. Set your token: `export S2_ACCESS_TOKEN=your_token`
+5. Run: `go run ./otelcol-dev --config config.yaml`
+6. Send logs via OTLP to `http://localhost:4318/v1/logs`
+
+For detailed setup instructions, see the [Prerequisites](#prerequisites) section below.
+
 ## Prerequisites
 
-1. **S2 Access Token**: Set the `S2_ACCESS_TOKEN` environment variable
+### 1. S2 Account & Access Token
+
+Follow the [S2 Quickstart](https://s2.dev/docs/quickstart) to:
+
+1. **Create an account** and log in to [S2 Dashboard](https://s2.dev/dashboard)
+2. **Create an organization**
+3. **Issue an access token** in the dashboard settings
+4. **Set the token** in your environment:
    ```bash
    export S2_ACCESS_TOKEN=your_token_here
    ```
 
-2. **S2 Basin**: Create or identify the basin where logs will be stored
+### 2. Create a Basin
 
-3. **Go 1.24+**: Required to build and run the collector
+Basins are globally unique storage containers. Using the [S2 CLI](https://s2.dev/docs/cli):
+
+```bash
+# Choose a unique basin name (8-48 chars, lowercase letters, numbers, hyphens)
+export BASIN="my-logs-basin"
+s2 create-basin ${BASIN}
+```
+
+For more information, see the [S2 Basin documentation](https://s2.dev/docs/basin).
+
+### 3. Runtime Requirements
+
+- **Go 1.24+**: Required to build and run the collector
 
 ## Configuration
 
